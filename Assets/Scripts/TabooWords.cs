@@ -37,6 +37,15 @@ public class TabooWords : MonoBehaviour
     private string[] wE29 = new string[] { "Picture", "paint", "image", "photo", "draw", "view" };
     private string[] wE30 = new string[] { "Camera", "phone", "action", "photo", "video", "record" };
     private string[] wE31 = new string[] { "Dark", "black", "shadow", "light", "bright", "night" };
+    private string[] wE32 = new string[] { "Pencil", "write", "paper", "eraser", "book", "school" };
+    private string[] wE33 = new string[] { "Tea", "cup", "leaf", "hot", "juice", "sugar" };
+    private string[] wE34 = new string[] { "Game", "play", "fun", "enjoy", "competition", "time" };
+    private string[] wE35 = new string[] { "Time", "clock", "watch", "hour", "minute", "second" };
+    private string[] wE36 = new string[] { "Love", "like", "couple", "heart", "marriage", "engagement" };
+    private string[] wE37 = new string[] { "Knife", "cut", "stab", "chop", "murder", "kill" };
+    private string[] wE38 = new string[] { "Fork", "kitchen", "spoon", "meal", "spagetti", "food" };
+    private string[] wE39 = new string[] { "Vegetable", "plant", "healthy", "tomatoe", "fruit", "green" };
+    private string[] wE40 = new string[] { "Forget", "remind", "remember", "memory", "alzheimer", "amnesia" };
 
 
 
@@ -173,8 +182,8 @@ public class TabooWords : MonoBehaviour
                 easyWordIndex.Add(savedRandomWord);
             }
 
-            easyWords = new string[][] {wE1,wE2,wE3,wE4,wE5,wE6,wE7,wE8, wE9 , wE10 , wE11, wE12, wE13, wE14, wE15, wE16, wE17, wE18, wE19, wE20, wE21, wE22, wE23, wE24, wE25, wE26, wE27, wE28, wE29, wE30, wE31 };
-            
+            easyWords = new string[][] { wE1, wE2, wE3, wE4, wE5, wE6, wE7, wE8, wE9, wE10, wE11, wE12, wE13, wE14, wE15, wE16, wE17, wE18, wE19, wE20, wE21, wE22, wE23, wE24, wE25, wE26, wE27, wE28, wE29, wE30, wE31, wE32, wE33, wE34, wE35, wE36, wE37, wE38, wE39, wE40 };
+
             randomWord = Random.Range(0, easyWords.Length);
 
             while (easyWordIndex.Count == 0 && lastSavedIndex == randomWord)
@@ -186,10 +195,10 @@ public class TabooWords : MonoBehaviour
             {
                 randomWord = Random.Range(0, easyWords.Length);
             }
+
             if (!easyWordIndex.Contains(randomWord))
             {
                 easyWordIndex.Add(randomWord);
-
                 Word.text = easyWords[randomWord][0];
                 taboo1.text = easyWords[randomWord][1];
                 taboo2.text = easyWords[randomWord][2];
@@ -225,7 +234,7 @@ public class TabooWords : MonoBehaviour
                 mediumWordIndex.Add(savedRandomWord);
             }
 
-            mediumWords = new string[][] { wM1, wM2, wM3, wM4, wM5, wM6, wM7, wM8, wM9, wM10, wM11, wM12, wM13, wM14, wM15, wM16, wM17, wM18, wM19,wM20, wM21, wM22, wM23, wM24, wM25, wM26, wM27, wM28, wM29, wM30, wM31,wM32, wM33, wM34, wM35, wM36, wM37 };
+            mediumWords = new string[][] { wM1, wM2, wM3, wM4, wM5, wM6, wM7, wM8, wM9, wM10, wM11, wM12, wM13, wM14, wM15, wM16, wM17, wM18, wM19, wM20, wM21, wM22, wM23, wM24, wM25, wM26, wM27, wM28, wM29, wM30, wM31, wM32, wM33, wM34, wM35, wM36, wM37 };
 
             randomWord = Random.Range(0, mediumWords.Length);
 
@@ -339,11 +348,13 @@ public class TabooWords : MonoBehaviour
             {
                 randomWord = Random.Range(0, easyWords.Length);
             }
+
             if (!easyWordIndex.Contains(randomWord))
             {
                 easyWordIndex.Add(randomWord);
 
                 Word.text = easyWords[randomWord][0];
+                print(easyWords[randomWord][0]);
                 taboo1.text = easyWords[randomWord][1];
                 taboo2.text = easyWords[randomWord][2];
                 taboo3.text = easyWords[randomWord][3];
@@ -409,7 +420,7 @@ public class TabooWords : MonoBehaviour
             for (int i = 0; i < mediumWordIndex.Count; i++)
             {
                 PlayerPrefs.SetInt("wordindexmedium" + i, mediumWordIndex[i]);
-                
+
             }
         }
 
@@ -652,7 +663,7 @@ public class TabooWords : MonoBehaviour
 
                 counter++;
                 passButtonText.text = "Pass (" + (passRight - counter) + ")";
-                
+
                 if (counter == passRight)
                 {
                     Color buttonColor = pass.color;
@@ -792,6 +803,6 @@ public class TabooWords : MonoBehaviour
                 }
             }
         }
-       
+
     }
 }

@@ -98,5 +98,8 @@ public class SceneLoad : MonoBehaviour
         {
             PlayerPrefs.DeleteKey("wordindexhard" + i);
         }
+        PlayerPrefs.DeleteKey("wordcounteasy");
+        PlayerPrefs.DeleteKey("wordcountmedium");
+        PlayerPrefs.DeleteKey("wordcounthard");
     }
 }
