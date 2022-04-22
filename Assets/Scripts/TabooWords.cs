@@ -46,6 +46,16 @@ public class TabooWords : MonoBehaviour
     private string[] wE38 = new string[] { "Fork", "kitchen", "spoon", "meal", "spagetti", "food" };
     private string[] wE39 = new string[] { "Vegetable", "plant", "healthy", "tomatoe", "fruit", "green" };
     private string[] wE40 = new string[] { "Forget", "remind", "remember", "memory", "alzheimer", "amnesia" };
+    private string[] wE41 = new string[] { "Computer", "hardware", "software", "keyboard", "mouse", "machine" };
+    private string[] wE42 = new string[] { "T-shirt", "casual", "comfort", "summer", "short", "hot" };
+    private string[] wE43 = new string[] { "Sun", "light", "hot", "moon", "day", "star" };
+    private string[] wE44 = new string[] { "Moon", "sun", "night", "light", "white", "ocean" };
+    private string[] wE45 = new string[] { "Gold", "silver", "valuable", "investment", "money", "mine" };
+    private string[] wE46 = new string[] { "Soldier", "war", "weapon", "army", "discipline", "uniform" };
+    private string[] wE47 = new string[] { "Water", "need", "life", "rain", "sea", "ocean" };
+    private string[] wE48 = new string[] { "Fire", "light", "warm", "red", "water", "burn" };
+    private string[] wE49 = new string[] { "Paper", "pen", "tree", "white", "write", "book" };
+    private string[] wE50 = new string[] { "Baby", "little", "cry", "milk", "mother", "father" };
 
 
 
@@ -84,10 +94,13 @@ public class TabooWords : MonoBehaviour
     private string[] wM31 = new string[] { "Mayor", "study", "politician", "city", "town", "govern" };
     private string[] wM32 = new string[] { "Exotic", "unusual", "uncommon", "fruit", "foreign", "rare" };
     private string[] wM33 = new string[] { "Lightning", "electricity", "storm", "thunder", "strike", "flash" };
-    private string[] wM34 = new string[] { "Mass", "volume", "bulk", "body", "multitude", "people" };
+    private string[] wM34 = new string[] { "Mass", "volume", "bulk", "body", "multitude", "GYM" };
     private string[] wM35 = new string[] { "Boil", "hot", "water", "degrees", "bubble", "pot" };
     private string[] wM36 = new string[] { "Lake", "water", "mass", "lagoon", "ice-skate", "river" };
     private string[] wM37 = new string[] { "Subway", "train", "underground", "transportation", "surfer", "sandwich" };
+    private string[] wM38 = new string[] { "News", "agenda", "information", "TV", "report", "daily" };
+    private string[] wM39 = new string[] { "Air Conditioner", "cool", "hot", "summer", "cold", "comfort" };
+    private string[] wM40 = new string[] { "Patriot", "homelander", "nationalist", "country", "motherland", "native" };
 
 
 
@@ -130,6 +143,9 @@ public class TabooWords : MonoBehaviour
     private string[] wH35 = new string[] { "Resume", "curriculum", "statement", "story", "summery", "life" };
     private string[] wH36 = new string[] { "Style", "fashion", "clothes", "wear", "manner", "way" };
     private string[] wH37 = new string[] { "Handicap", "disabled", "impaired", "wheelchair", "help", "assistance" };
+    private string[] wH38 = new string[] { "Asylum Seeker", "refugee", "escape", "war", "migrant", "fugitive" };
+    private string[] wH39 = new string[] { "Inflation", "economy", "expensiveness", "cost", "impoverishment", "country" };
+    private string[] wH40 = new string[] { "Alliance", "unity", "union", "collaboration", "ally", "fellow" };
 
 
     // Creating list and array objects for each difficulties
@@ -182,7 +198,8 @@ public class TabooWords : MonoBehaviour
                 easyWordIndex.Add(savedRandomWord);
             }
 
-            easyWords = new string[][] { wE1, wE2, wE3, wE4, wE5, wE6, wE7, wE8, wE9, wE10, wE11, wE12, wE13, wE14, wE15, wE16, wE17, wE18, wE19, wE20, wE21, wE22, wE23, wE24, wE25, wE26, wE27, wE28, wE29, wE30, wE31, wE32, wE33, wE34, wE35, wE36, wE37, wE38, wE39, wE40 };
+            easyWords = new string[][] { wE1, wE2, wE3, wE4, wE5, wE6, wE7, wE8, wE9, wE10, wE11, wE12, wE13, wE14, wE15, wE16, wE17, wE18, wE19, wE20, wE21, wE22, wE23,
+                wE24, wE25, wE26, wE27, wE28, wE29, wE30, wE31, wE32, wE33, wE34, wE35, wE36, wE37, wE38, wE39, wE40,wE41, wE42,wE43,wE44,wE45,wE46,wE47,wE48,wE49,wE50 };
 
             randomWord = Random.Range(0, easyWords.Length);
 
@@ -234,7 +251,8 @@ public class TabooWords : MonoBehaviour
                 mediumWordIndex.Add(savedRandomWord);
             }
 
-            mediumWords = new string[][] { wM1, wM2, wM3, wM4, wM5, wM6, wM7, wM8, wM9, wM10, wM11, wM12, wM13, wM14, wM15, wM16, wM17, wM18, wM19, wM20, wM21, wM22, wM23, wM24, wM25, wM26, wM27, wM28, wM29, wM30, wM31, wM32, wM33, wM34, wM35, wM36, wM37 };
+            mediumWords = new string[][] { wM1, wM2, wM3, wM4, wM5, wM6, wM7, wM8, wM9, wM10, wM11, wM12, wM13, wM14, wM15, wM16, wM17, wM18, wM19, wM20, wM21, wM22, wM23,
+                wM24, wM25, wM26, wM27, wM28, wM29, wM30, wM31, wM32, wM33, wM34, wM35, wM36, wM37,wM38 ,wM39 ,wM40 };
 
             randomWord = Random.Range(0, mediumWords.Length);
 
@@ -285,7 +303,8 @@ public class TabooWords : MonoBehaviour
                 hardWordIndex.Add(savedRandomWord);
             }
 
-            hardWords = new string[][] { wH1, wH2, wH3, wH4, wH5, wH6, wH7, wH8, wH9, wH10, wH11, wH12, wH13, wH14, wH15, wH16, wH17, wH18, wH19, wH20, wH21, wH22, wH23, wH24, wH25, wH26, wH27, wH28, wH29, wH30, wH31, wH32, wH33, wH34, wH35, wH36, wH37 };
+            hardWords = new string[][] { wH1, wH2, wH3, wH4, wH5, wH6, wH7, wH8, wH9, wH10, wH11, wH12, wH13, wH14, wH15, wH16, wH17, wH18, wH19, wH20, wH21, wH22, wH23,
+                wH24, wH25, wH26, wH27, wH28, wH29, wH30, wH31, wH32, wH33, wH34, wH35, wH36, wH37, wH38 ,wH39, wH40 };
 
             randomWord = Random.Range(0, hardWords.Length);
 
@@ -354,7 +373,6 @@ public class TabooWords : MonoBehaviour
                 easyWordIndex.Add(randomWord);
 
                 Word.text = easyWords[randomWord][0];
-                print(easyWords[randomWord][0]);
                 taboo1.text = easyWords[randomWord][1];
                 taboo2.text = easyWords[randomWord][2];
                 taboo3.text = easyWords[randomWord][3];
