@@ -1,12 +1,10 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class TeamChange : MonoBehaviour
 {
-    public Text time,team,scoretext;
-    private int ss;
+    [SerializeField] private Text time,team,scoretext;
+
     private int counter, team1score, team2score,score;
     private string team1, team2;
 
@@ -18,11 +16,9 @@ public class TeamChange : MonoBehaviour
         counter = PlayerPrefs.GetInt("count");
         scoretext.text = 0 + "";
     }
-    public void Update()
+    public void ChangePlayerTeam()
     {
-        ss = int.Parse(time.text);
-
-        if(ss==0 && counter % 2 ==0)
+        if(counter % 2 ==0)
         {
             score = int.Parse(scoretext.text);
             team1score = PlayerPrefs.GetInt("team1score");
@@ -32,9 +28,8 @@ public class TeamChange : MonoBehaviour
             counter++;
             PlayerPrefs.SetInt("count",counter);
             PlayerPrefs.SetString("turn", team2);
-            SceneManager.LoadScene(3);
         }
-        else if(ss ==0 && counter%2==1)
+        else if(counter%2==1)
         {
             score = int.Parse(scoretext.text);
             team2score = PlayerPrefs.GetInt("team2score");
@@ -44,7 +39,6 @@ public class TeamChange : MonoBehaviour
             counter++;
             PlayerPrefs.SetInt("count", counter);
             PlayerPrefs.SetString("turn", team1);
-            SceneManager.LoadScene(3);
         }
     }
 }

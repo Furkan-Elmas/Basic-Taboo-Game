@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class TabooWords : MonoBehaviour
 {
-    //**************   Easy Words   **************
+    #region Easy Words
 
     private string[] wE1 = new string[] { "Internet", "computer", "web", "surf", "net", "technology" };
     private string[] wE2 = new string[] { "Jacket", "coat", "warm", "clothes", "sleeves", "zipper" };
@@ -57,9 +58,9 @@ public class TabooWords : MonoBehaviour
     private string[] wE49 = new string[] { "Paper", "pen", "tree", "white", "write", "book" };
     private string[] wE50 = new string[] { "Baby", "little", "cry", "milk", "mother", "father" };
 
+    #endregion
 
-
-    //**************   Medium Words   **************
+    #region Medium Words
 
     private string[] wM1 = new string[] { "Shower", "rain", "clean", "water", "every day", "bath" };
     private string[] wM2 = new string[] { "Wind", "blow", "autumn", "invisible", "trees", "kite" };
@@ -102,9 +103,9 @@ public class TabooWords : MonoBehaviour
     private string[] wM39 = new string[] { "Air Conditioner", "cool", "hot", "summer", "cold", "comfort" };
     private string[] wM40 = new string[] { "Patriot", "homelander", "nationalist", "country", "motherland", "native" };
 
+    #endregion
 
-
-    //**************   Hard Words   **************
+    #region Hard Words
 
     private string[] wH1 = new string[] { "Foreigner", "teacher", "different", "outside", "country", "travel" };
     private string[] wH2 = new string[] { "Pride", "fall", "lion", "proud", "help", "refuse" };
@@ -144,546 +145,547 @@ public class TabooWords : MonoBehaviour
     private string[] wH36 = new string[] { "Style", "fashion", "clothes", "wear", "manner", "way" };
     private string[] wH37 = new string[] { "Handicap", "disabled", "impaired", "wheelchair", "help", "assistance" };
     private string[] wH38 = new string[] { "Asylum Seeker", "refugee", "escape", "war", "migrant", "fugitive" };
-    private string[] wH39 = new string[] { "Inflation", "economy", "expensiveness", "cost", "impoverishment", "country" };
-    private string[] wH40 = new string[] { "Alliance", "unity", "union", "collaboration", "ally", "fellow" };
 
+    #endregion
+
+    [SerializeField] private Text mainWord, tabooWord1, tabooWord2, tabooWord3, tabooWord4, tabooWord5;
+    [SerializeField] private Text team, scoretext, passButtonText;
+    [SerializeField] private Image pass;
 
     // Creating list and array objects for each difficulties
     // List objects are for saving the randomly generated index number
     // Arrays are for saving the words
 
-    List<int> easyWordIndex = new List<int>();
-    string[][] easyWords = new string[31][];
+    private List<int> _easyWordIndex = new List<int>();
+    private string[][] _easyWords = new string[50][];
 
-    List<int> mediumWordIndex = new List<int>();
-    string[][] mediumWords = new string[37][];
+    private List<int> _mediumWordIndex = new List<int>();
+    private string[][] _mediumWords = new string[40][];
 
 
-    List<int> hardWordIndex = new List<int>();
-    string[][] hardWords = new string[37][];
+    private List<int> _hardWordIndex = new List<int>();
+    private string[][] _hardWords = new string[38][];
 
-    public Text Word, taboo1, taboo2, taboo3, taboo4, taboo5;
+    private int _score, _counter;
+    private int _passRight, _randomWord, _savedListCount, _savedRandomWord, _lastSavedIndex;
+    private string _difficulty;
 
-    public Text team, scoretext, passButtonText;
-    private int score, counter;
-
-    private int passRight, randomWord, savedListCount, savedRandomWord, lastSavedIndex;
-    private string difficulty;
-
-    public Image pass;
 
     public void Start()
     {
         // Taking pass-right and difficulty from settings scene
 
-        passRight = PlayerPrefs.GetInt("passright");
-        difficulty = PlayerPrefs.GetString("difficulty");
-        passButtonText.text = "Pass (" + passRight + ")";
+        _passRight = PlayerPrefs.GetInt("passright");
+        _difficulty = PlayerPrefs.GetString("difficulty");
+        passButtonText.text = "Pass (" + _passRight + ")";
 
         // Creating 'if' blocks for each difficulties
 
-        if (difficulty == "Easy")
+        if (_difficulty == "Easy")
         {
             // Taking last seen word's index so as not to repeat
             // Taking last saved list count
 
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
-            savedListCount = PlayerPrefs.GetInt("wordcounteasy");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _savedListCount = PlayerPrefs.GetInt("wordcounteasy");
 
             // Taking and adding all saved indexes to available list
 
-            for (int i = 0; i < savedListCount; i++)
+            for (int i = 0; i < _savedListCount; i++)
             {
-                savedRandomWord = PlayerPrefs.GetInt("wordindexeasy" + i);
-                easyWordIndex.Add(savedRandomWord);
+                _savedRandomWord = PlayerPrefs.GetInt("wordindexeasy" + i);
+                _easyWordIndex.Add(_savedRandomWord);
             }
 
-            easyWords = new string[][] { wE1, wE2, wE3, wE4, wE5, wE6, wE7, wE8, wE9, wE10, wE11, wE12, wE13, wE14, wE15, wE16, wE17, wE18, wE19, wE20, wE21, wE22, wE23,
+            _easyWords = new string[][] { wE1, wE2, wE3, wE4, wE5, wE6, wE7, wE8, wE9, wE10, wE11, wE12, wE13, wE14, wE15, wE16, wE17, wE18, wE19, wE20, wE21, wE22, wE23,
                 wE24, wE25, wE26, wE27, wE28, wE29, wE30, wE31, wE32, wE33, wE34, wE35, wE36, wE37, wE38, wE39, wE40,wE41, wE42,wE43,wE44,wE45,wE46,wE47,wE48,wE49,wE50 };
 
-            randomWord = Random.Range(0, easyWords.Length);
+            _randomWord = Random.Range(0, _easyWords.Length);
 
-            while (easyWordIndex.Count == 0 && lastSavedIndex == randomWord)
+            while (_easyWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, easyWords.Length);
+                _randomWord = Random.Range(0, _easyWords.Length);
             }
 
-            while (easyWordIndex.Contains(randomWord))
+            while (_easyWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, easyWords.Length);
+                _randomWord = Random.Range(0, _easyWords.Length);
             }
 
-            if (!easyWordIndex.Contains(randomWord))
+            if (!_easyWordIndex.Contains(_randomWord))
             {
-                easyWordIndex.Add(randomWord);
-                Word.text = easyWords[randomWord][0];
-                taboo1.text = easyWords[randomWord][1];
-                taboo2.text = easyWords[randomWord][2];
-                taboo3.text = easyWords[randomWord][3];
-                taboo4.text = easyWords[randomWord][4];
-                taboo5.text = easyWords[randomWord][5];
+                _easyWordIndex.Add(_randomWord);
+                mainWord.text = _easyWords[_randomWord][0];
+                tabooWord1.text = _easyWords[_randomWord][1];
+                tabooWord2.text = _easyWords[_randomWord][2];
+                tabooWord3.text = _easyWords[_randomWord][3];
+                tabooWord4.text = _easyWords[_randomWord][4];
+                tabooWord5.text = _easyWords[_randomWord][5];
 
                 // Clears the list if all words are taken 
 
-                if (easyWordIndex.Count == easyWords.Length)
+                if (_easyWordIndex.Count == _easyWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    easyWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _easyWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcounteasy", easyWordIndex.Count);
+            PlayerPrefs.SetInt("wordcounteasy", _easyWordIndex.Count);
 
-            for (int i = 0; i < easyWordIndex.Count; i++)
+            for (int i = 0; i < _easyWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexeasy" + i, easyWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexeasy" + i, _easyWordIndex[i]);
             }
         }
 
-        if (difficulty == "Medium")
+        if (_difficulty == "Medium")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
-            savedListCount = PlayerPrefs.GetInt("wordcountmedium");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _savedListCount = PlayerPrefs.GetInt("wordcountmedium");
 
-            for (int i = 0; i < savedListCount; i++)
+            for (int i = 0; i < _savedListCount; i++)
             {
-                savedRandomWord = PlayerPrefs.GetInt("wordindexmedium" + i);
-                mediumWordIndex.Add(savedRandomWord);
+                _savedRandomWord = PlayerPrefs.GetInt("wordindexmedium" + i);
+                _mediumWordIndex.Add(_savedRandomWord);
             }
 
-            mediumWords = new string[][] { wM1, wM2, wM3, wM4, wM5, wM6, wM7, wM8, wM9, wM10, wM11, wM12, wM13, wM14, wM15, wM16, wM17, wM18, wM19, wM20, wM21, wM22, wM23,
+            _mediumWords = new string[][] { wM1, wM2, wM3, wM4, wM5, wM6, wM7, wM8, wM9, wM10, wM11, wM12, wM13, wM14, wM15, wM16, wM17, wM18, wM19, wM20, wM21, wM22, wM23,
                 wM24, wM25, wM26, wM27, wM28, wM29, wM30, wM31, wM32, wM33, wM34, wM35, wM36, wM37,wM38 ,wM39 ,wM40 };
 
-            randomWord = Random.Range(0, mediumWords.Length);
+            _randomWord = Random.Range(0, _mediumWords.Length);
 
-            while (lastSavedIndex == randomWord)
+            while (_lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, mediumWords.Length);
+                _randomWord = Random.Range(0, _mediumWords.Length);
             }
 
-            while (mediumWordIndex.Contains(randomWord))
+            while (_mediumWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, mediumWords.Length);
+                _randomWord = Random.Range(0, _mediumWords.Length);
             }
-            if (!mediumWordIndex.Contains(randomWord))
+            if (!_mediumWordIndex.Contains(_randomWord))
             {
-                mediumWordIndex.Add(randomWord);
+                _mediumWordIndex.Add(_randomWord);
 
-                Word.text = mediumWords[randomWord][0];
-                taboo1.text = mediumWords[randomWord][1];
-                taboo2.text = mediumWords[randomWord][2];
-                taboo3.text = mediumWords[randomWord][3];
-                taboo4.text = mediumWords[randomWord][4];
-                taboo5.text = mediumWords[randomWord][5];
+                mainWord.text = _mediumWords[_randomWord][0];
+                tabooWord1.text = _mediumWords[_randomWord][1];
+                tabooWord2.text = _mediumWords[_randomWord][2];
+                tabooWord3.text = _mediumWords[_randomWord][3];
+                tabooWord4.text = _mediumWords[_randomWord][4];
+                tabooWord5.text = _mediumWords[_randomWord][5];
 
-                if (mediumWordIndex.Count == mediumWords.Length)
+                if (_mediumWordIndex.Count == _mediumWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    mediumWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _mediumWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcountmedium", mediumWordIndex.Count);
+            PlayerPrefs.SetInt("wordcountmedium", _mediumWordIndex.Count);
 
-            for (int i = 0; i < mediumWordIndex.Count; i++)
+            for (int i = 0; i < _mediumWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexmedium" + i, mediumWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexmedium" + i, _mediumWordIndex[i]);
             }
 
         }
 
-        if (difficulty == "Hard")
+        if (_difficulty == "Hard")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
-            savedListCount = PlayerPrefs.GetInt("wordcounthard");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _savedListCount = PlayerPrefs.GetInt("wordcounthard");
 
-            for (int i = 0; i < savedListCount; i++)
+            for (int i = 0; i < _savedListCount; i++)
             {
-                savedRandomWord = PlayerPrefs.GetInt("wordindexhard" + i);
-                hardWordIndex.Add(savedRandomWord);
+                _savedRandomWord = PlayerPrefs.GetInt("wordindexhard" + i);
+                _hardWordIndex.Add(_savedRandomWord);
             }
 
-            hardWords = new string[][] { wH1, wH2, wH3, wH4, wH5, wH6, wH7, wH8, wH9, wH10, wH11, wH12, wH13, wH14, wH15, wH16, wH17, wH18, wH19, wH20, wH21, wH22, wH23,
-                wH24, wH25, wH26, wH27, wH28, wH29, wH30, wH31, wH32, wH33, wH34, wH35, wH36, wH37, wH38 ,wH39, wH40 };
+            _hardWords = new string[][] { wH1, wH2, wH3, wH4, wH5, wH6, wH7, wH8, wH9, wH10, wH11, wH12, wH13, wH14, wH15, wH16, wH17, wH18, wH19, wH20, wH21, wH22, wH23,
+                wH24, wH25, wH26, wH27, wH28, wH29, wH30, wH31, wH32, wH33, wH34, wH35, wH36, wH37, wH38 };
 
-            randomWord = Random.Range(0, hardWords.Length);
+            _randomWord = Random.Range(0, _hardWords.Length);
 
-            while (hardWordIndex.Count == 0 && lastSavedIndex == randomWord)
+            while (_hardWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, hardWords.Length);
+                _randomWord = Random.Range(0, _hardWords.Length);
             }
 
-            while (hardWordIndex.Contains(randomWord))
+            while (_hardWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, hardWords.Length);
+                _randomWord = Random.Range(0, _hardWords.Length);
             }
-            if (!hardWordIndex.Contains(randomWord))
+            if (!_hardWordIndex.Contains(_randomWord))
             {
-                hardWordIndex.Add(randomWord);
+                _hardWordIndex.Add(_randomWord);
 
-                Word.text = hardWords[randomWord][0];
-                taboo1.text = hardWords[randomWord][1];
-                taboo2.text = hardWords[randomWord][2];
-                taboo3.text = hardWords[randomWord][3];
-                taboo4.text = hardWords[randomWord][4];
-                taboo5.text = hardWords[randomWord][5];
+                mainWord.text = _hardWords[_randomWord][0];
+                tabooWord1.text = _hardWords[_randomWord][1];
+                tabooWord2.text = _hardWords[_randomWord][2];
+                tabooWord3.text = _hardWords[_randomWord][3];
+                tabooWord4.text = _hardWords[_randomWord][4];
+                tabooWord5.text = _hardWords[_randomWord][5];
 
-                if (hardWordIndex.Count == hardWords.Length)
+                if (_hardWordIndex.Count == _hardWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    hardWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _hardWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcounthard", hardWordIndex.Count);
+            PlayerPrefs.SetInt("wordcounthard", _hardWordIndex.Count);
 
-            for (int i = 0; i < hardWordIndex.Count; i++)
+            for (int i = 0; i < _hardWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexhard" + i, hardWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexhard" + i, _hardWordIndex[i]);
             }
         }
     }
 
     public void correctButton()
     {
-        if (difficulty == "Easy")
+        if (_difficulty == "Easy")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            score = PlayerPrefs.GetInt("gamescore");
-            score++;
-            PlayerPrefs.SetInt("gamescore", score);
+            _score = PlayerPrefs.GetInt("gamescore");
+            _score++;
+            PlayerPrefs.SetInt("gamescore", _score);
 
-            scoretext.text = score.ToString();
+            scoretext.text = _score.ToString();
 
-            randomWord = Random.Range(0, easyWords.Length);
+            _randomWord = Random.Range(0, _easyWords.Length);
 
-            while (easyWordIndex.Count == 0 && lastSavedIndex == randomWord)
+            while (_easyWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, easyWords.Length);
+                _randomWord = Random.Range(0, _easyWords.Length);
             }
 
-            while (easyWordIndex.Contains(randomWord))
+            while (_easyWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, easyWords.Length);
+                _randomWord = Random.Range(0, _easyWords.Length);
             }
 
-            if (!easyWordIndex.Contains(randomWord))
+            if (!_easyWordIndex.Contains(_randomWord))
             {
-                easyWordIndex.Add(randomWord);
+                _easyWordIndex.Add(_randomWord);
 
-                Word.text = easyWords[randomWord][0];
-                taboo1.text = easyWords[randomWord][1];
-                taboo2.text = easyWords[randomWord][2];
-                taboo3.text = easyWords[randomWord][3];
-                taboo4.text = easyWords[randomWord][4];
-                taboo5.text = easyWords[randomWord][5];
+                mainWord.text = _easyWords[_randomWord][0];
+                tabooWord1.text = _easyWords[_randomWord][1];
+                tabooWord2.text = _easyWords[_randomWord][2];
+                tabooWord3.text = _easyWords[_randomWord][3];
+                tabooWord4.text = _easyWords[_randomWord][4];
+                tabooWord5.text = _easyWords[_randomWord][5];
 
-                if (easyWordIndex.Count == easyWords.Length)
+                if (_easyWordIndex.Count == _easyWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    easyWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _easyWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcounteasy", easyWordIndex.Count);
+            PlayerPrefs.SetInt("wordcounteasy", _easyWordIndex.Count);
 
-            for (int i = 0; i < easyWordIndex.Count; i++)
+            for (int i = 0; i < _easyWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexeasy" + i, easyWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexeasy" + i, _easyWordIndex[i]);
             }
         }
 
-        if (difficulty == "Medium")
+        if (_difficulty == "Medium")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            score = PlayerPrefs.GetInt("gamescore");
-            score++;
-            PlayerPrefs.SetInt("gamescore", score);
+            _score = PlayerPrefs.GetInt("gamescore");
+            _score++;
+            PlayerPrefs.SetInt("gamescore", _score);
 
-            scoretext.text = score.ToString();
+            scoretext.text = _score.ToString();
 
-            randomWord = Random.Range(0, mediumWords.Length);
+            _randomWord = Random.Range(0, _mediumWords.Length);
 
-            while (mediumWordIndex.Count == 0 && lastSavedIndex == randomWord)
+            while (_mediumWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, mediumWords.Length);
+                _randomWord = Random.Range(0, _mediumWords.Length);
             }
 
-            while (mediumWordIndex.Contains(randomWord))
+            while (_mediumWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, mediumWords.Length);
+                _randomWord = Random.Range(0, _mediumWords.Length);
             }
-            if (!mediumWordIndex.Contains(randomWord))
+            if (!_mediumWordIndex.Contains(_randomWord))
             {
-                mediumWordIndex.Add(randomWord);
+                _mediumWordIndex.Add(_randomWord);
 
-                Word.text = mediumWords[randomWord][0];
-                taboo1.text = mediumWords[randomWord][1];
-                taboo2.text = mediumWords[randomWord][2];
-                taboo3.text = mediumWords[randomWord][3];
-                taboo4.text = mediumWords[randomWord][4];
-                taboo5.text = mediumWords[randomWord][5];
+                mainWord.text = _mediumWords[_randomWord][0];
+                tabooWord1.text = _mediumWords[_randomWord][1];
+                tabooWord2.text = _mediumWords[_randomWord][2];
+                tabooWord3.text = _mediumWords[_randomWord][3];
+                tabooWord4.text = _mediumWords[_randomWord][4];
+                tabooWord5.text = _mediumWords[_randomWord][5];
 
-                if (mediumWordIndex.Count == mediumWords.Length)
+                if (_mediumWordIndex.Count == _mediumWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    mediumWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _mediumWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcountmedium", mediumWordIndex.Count);
+            PlayerPrefs.SetInt("wordcountmedium", _mediumWordIndex.Count);
 
-            for (int i = 0; i < mediumWordIndex.Count; i++)
+            for (int i = 0; i < _mediumWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexmedium" + i, mediumWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexmedium" + i, _mediumWordIndex[i]);
 
             }
         }
 
-        if (difficulty == "Hard")
+        if (_difficulty == "Hard")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            score = PlayerPrefs.GetInt("gamescore");
-            score++;
-            PlayerPrefs.SetInt("gamescore", score);
+            _score = PlayerPrefs.GetInt("gamescore");
+            _score++;
+            PlayerPrefs.SetInt("gamescore", _score);
 
-            scoretext.text = score.ToString();
+            scoretext.text = _score.ToString();
 
-            randomWord = Random.Range(0, hardWords.Length);
+            _randomWord = Random.Range(0, _hardWords.Length);
 
-            while (hardWordIndex.Count == 0 && lastSavedIndex == randomWord)
+            while (_hardWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, hardWords.Length);
+                _randomWord = Random.Range(0, _hardWords.Length);
             }
 
-            while (hardWordIndex.Contains(randomWord))
+            while (_hardWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, hardWords.Length);
+                _randomWord = Random.Range(0, _hardWords.Length);
             }
-            if (!hardWordIndex.Contains(randomWord))
+            if (!_hardWordIndex.Contains(_randomWord))
             {
-                hardWordIndex.Add(randomWord);
+                _hardWordIndex.Add(_randomWord);
 
-                Word.text = hardWords[randomWord][0];
-                taboo1.text = hardWords[randomWord][1];
-                taboo2.text = hardWords[randomWord][2];
-                taboo3.text = hardWords[randomWord][3];
-                taboo4.text = hardWords[randomWord][4];
-                taboo5.text = hardWords[randomWord][5];
+                mainWord.text = _hardWords[_randomWord][0];
+                tabooWord1.text = _hardWords[_randomWord][1];
+                tabooWord2.text = _hardWords[_randomWord][2];
+                tabooWord3.text = _hardWords[_randomWord][3];
+                tabooWord4.text = _hardWords[_randomWord][4];
+                tabooWord5.text = _hardWords[_randomWord][5];
 
-                if (hardWordIndex.Count == hardWords.Length)
+                if (_hardWordIndex.Count == _hardWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    hardWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _hardWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcounthard", hardWordIndex.Count);
+            PlayerPrefs.SetInt("wordcounthard", _hardWordIndex.Count);
 
-            for (int i = 0; i < hardWordIndex.Count; i++)
+            for (int i = 0; i < _hardWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexhard" + i, hardWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexhard" + i, _hardWordIndex[i]);
             }
         }
     }
 
     public void tabooButton()
     {
-        if (difficulty == "Easy")
+        if (_difficulty == "Easy")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            score = PlayerPrefs.GetInt("gamescore");
-            score--;
-            PlayerPrefs.SetInt("gamescore", score);
+            _score = PlayerPrefs.GetInt("gamescore");
+            _score--;
+            PlayerPrefs.SetInt("gamescore", _score);
 
-            scoretext.text = score.ToString();
+            scoretext.text = _score.ToString();
 
-            randomWord = Random.Range(0, easyWords.Length);
+            _randomWord = Random.Range(0, _easyWords.Length);
 
-            while (easyWordIndex.Count == 0 && lastSavedIndex == randomWord)
+            while (_easyWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, easyWords.Length);
+                _randomWord = Random.Range(0, _easyWords.Length);
             }
 
-            while (easyWordIndex.Contains(randomWord))
+            while (_easyWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, easyWords.Length);
+                _randomWord = Random.Range(0, _easyWords.Length);
             }
-            if (!easyWordIndex.Contains(randomWord))
+
+            if (!_easyWordIndex.Contains(_randomWord))
             {
-                easyWordIndex.Add(randomWord);
+                _easyWordIndex.Add(_randomWord);
 
-                Word.text = easyWords[randomWord][0];
-                taboo1.text = easyWords[randomWord][1];
-                taboo2.text = easyWords[randomWord][2];
-                taboo3.text = easyWords[randomWord][3];
-                taboo4.text = easyWords[randomWord][4];
-                taboo5.text = easyWords[randomWord][5];
+                mainWord.text = _easyWords[_randomWord][0];
+                tabooWord1.text = _easyWords[_randomWord][1];
+                tabooWord2.text = _easyWords[_randomWord][2];
+                tabooWord3.text = _easyWords[_randomWord][3];
+                tabooWord4.text = _easyWords[_randomWord][4];
+                tabooWord5.text = _easyWords[_randomWord][5];
 
-                if (easyWordIndex.Count == easyWords.Length)
+                if (_easyWordIndex.Count == _easyWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    easyWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _easyWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcounteasy", easyWordIndex.Count);
+            PlayerPrefs.SetInt("wordcounteasy", _easyWordIndex.Count);
 
-            for (int i = 0; i < easyWordIndex.Count; i++)
+            for (int i = 0; i < _easyWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexeasy" + i, easyWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexeasy" + i, _easyWordIndex[i]);
             }
         }
 
-        if (difficulty == "Medium")
+        if (_difficulty == "Medium")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
-            savedListCount = PlayerPrefs.GetInt("wordcountmedium");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            score = PlayerPrefs.GetInt("gamescore");
-            score--;
-            PlayerPrefs.SetInt("gamescore", score);
+            _score = PlayerPrefs.GetInt("gamescore");
+            _score--;
+            PlayerPrefs.SetInt("gamescore", _score);
 
-            scoretext.text = score.ToString();
+            scoretext.text = _score.ToString();
 
-            randomWord = Random.Range(0, mediumWords.Length);
+            _randomWord = Random.Range(0, _mediumWords.Length);
 
-            while (mediumWordIndex.Count == 0 && lastSavedIndex == randomWord)
+            while (_mediumWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, mediumWords.Length);
+                _randomWord = Random.Range(0, _mediumWords.Length);
             }
 
-            while (mediumWordIndex.Contains(randomWord))
+            while (_mediumWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, mediumWords.Length);
+                _randomWord = Random.Range(0, _mediumWords.Length);
             }
-            if (!mediumWordIndex.Contains(randomWord))
+            if (!_mediumWordIndex.Contains(_randomWord))
             {
-                mediumWordIndex.Add(randomWord);
+                _mediumWordIndex.Add(_randomWord);
 
-                Word.text = mediumWords[randomWord][0];
-                taboo1.text = mediumWords[randomWord][1];
-                taboo2.text = mediumWords[randomWord][2];
-                taboo3.text = mediumWords[randomWord][3];
-                taboo4.text = mediumWords[randomWord][4];
-                taboo5.text = mediumWords[randomWord][5];
+                mainWord.text = _mediumWords[_randomWord][0];
+                tabooWord1.text = _mediumWords[_randomWord][1];
+                tabooWord2.text = _mediumWords[_randomWord][2];
+                tabooWord3.text = _mediumWords[_randomWord][3];
+                tabooWord4.text = _mediumWords[_randomWord][4];
+                tabooWord5.text = _mediumWords[_randomWord][5];
 
-                if (mediumWordIndex.Count == mediumWords.Length)
+                if (_mediumWordIndex.Count == _mediumWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    mediumWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _mediumWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcountmedium", mediumWordIndex.Count);
+            PlayerPrefs.SetInt("wordcountmedium", _mediumWordIndex.Count);
 
-            for (int i = 0; i < mediumWordIndex.Count; i++)
+            for (int i = 0; i < _mediumWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexmedium" + i, mediumWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexmedium" + i, _mediumWordIndex[i]);
+
             }
         }
 
-        if (difficulty == "Hard")
+        if (_difficulty == "Hard")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
-            savedListCount = PlayerPrefs.GetInt("wordcounthard");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            score = PlayerPrefs.GetInt("gamescore");
-            score--;
-            PlayerPrefs.SetInt("gamescore", score);
+            _score = PlayerPrefs.GetInt("gamescore");
+            _score--;
+            PlayerPrefs.SetInt("gamescore", _score);
 
-            scoretext.text = score.ToString();
+            scoretext.text = _score.ToString();
 
-            randomWord = Random.Range(0, hardWords.Length);
+            _randomWord = Random.Range(0, _hardWords.Length);
 
-            while (hardWordIndex.Count == 0 && lastSavedIndex == randomWord)
+            while (_hardWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
             {
-                randomWord = Random.Range(0, hardWords.Length);
+                _randomWord = Random.Range(0, _hardWords.Length);
             }
 
-            while (hardWordIndex.Contains(randomWord))
+            while (_hardWordIndex.Contains(_randomWord))
             {
-                randomWord = Random.Range(0, hardWords.Length);
+                _randomWord = Random.Range(0, _hardWords.Length);
             }
-            if (!hardWordIndex.Contains(randomWord))
+            if (!_hardWordIndex.Contains(_randomWord))
             {
-                hardWordIndex.Add(randomWord);
+                _hardWordIndex.Add(_randomWord);
 
-                Word.text = hardWords[randomWord][0];
-                taboo1.text = hardWords[randomWord][1];
-                taboo2.text = hardWords[randomWord][2];
-                taboo3.text = hardWords[randomWord][3];
-                taboo4.text = hardWords[randomWord][4];
-                taboo5.text = hardWords[randomWord][5];
+                mainWord.text = _hardWords[_randomWord][0];
+                tabooWord1.text = _hardWords[_randomWord][1];
+                tabooWord2.text = _hardWords[_randomWord][2];
+                tabooWord3.text = _hardWords[_randomWord][3];
+                tabooWord4.text = _hardWords[_randomWord][4];
+                tabooWord5.text = _hardWords[_randomWord][5];
 
-                if (hardWordIndex.Count == hardWords.Length)
+                if (_hardWordIndex.Count == _hardWords.Length)
                 {
-                    PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                    hardWordIndex.Clear();
+                    PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                    _hardWordIndex.Clear();
                 }
             }
 
-            PlayerPrefs.SetInt("wordcounthard", hardWordIndex.Count);
+            PlayerPrefs.SetInt("wordcounthard", _hardWordIndex.Count);
 
-            for (int i = 0; i < hardWordIndex.Count; i++)
+            for (int i = 0; i < _hardWordIndex.Count; i++)
             {
-                PlayerPrefs.SetInt("wordindexhard" + i, hardWordIndex[i]);
+                PlayerPrefs.SetInt("wordindexhard" + i, _hardWordIndex[i]);
             }
         }
     }
 
     public void passButton()
     {
-        if (difficulty == "Easy")
+        if (_difficulty == "Easy")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            if (counter != passRight)
+            if (_counter != _passRight)
             {
-                randomWord = Random.Range(0, easyWords.Length);
+                _randomWord = Random.Range(0, _easyWords.Length);
 
-                while (easyWordIndex.Count == 0 && lastSavedIndex == randomWord)
+                while (_easyWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
                 {
-                    randomWord = Random.Range(0, easyWords.Length);
+                    _randomWord = Random.Range(0, _easyWords.Length);
                 }
 
-                while (easyWordIndex.Contains(randomWord))
+                while (_easyWordIndex.Contains(_randomWord))
                 {
-                    randomWord = Random.Range(0, easyWords.Length);
+                    _randomWord = Random.Range(0, _easyWords.Length);
                 }
-                if (!easyWordIndex.Contains(randomWord))
+                if (!_easyWordIndex.Contains(_randomWord))
                 {
-                    easyWordIndex.Add(randomWord);
+                    _easyWordIndex.Add(_randomWord);
 
-                    Word.text = easyWords[randomWord][0];
-                    taboo1.text = easyWords[randomWord][1];
-                    taboo2.text = easyWords[randomWord][2];
-                    taboo3.text = easyWords[randomWord][3];
-                    taboo4.text = easyWords[randomWord][4];
-                    taboo5.text = easyWords[randomWord][5];
+                    mainWord.text = _easyWords[_randomWord][0];
+                    tabooWord1.text = _easyWords[_randomWord][1];
+                    tabooWord2.text = _easyWords[_randomWord][2];
+                    tabooWord3.text = _easyWords[_randomWord][3];
+                    tabooWord4.text = _easyWords[_randomWord][4];
+                    tabooWord5.text = _easyWords[_randomWord][5];
 
-                    if (easyWordIndex.Count == easyWords.Length)
+                    if (_easyWordIndex.Count == _easyWords.Length)
                     {
-                        PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                        easyWordIndex.Clear();
+                        PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                        _easyWordIndex.Clear();
                     }
                 }
 
-                for (int i = 0; i < easyWordIndex.Count; i++)
+                for (int i = 0; i < _easyWordIndex.Count; i++)
                 {
-                    PlayerPrefs.SetInt("wordindexeasy" + i, easyWordIndex[i]);
+                    PlayerPrefs.SetInt("wordindexeasy" + i, _easyWordIndex[i]);
                 }
-                PlayerPrefs.SetInt("wordcounteasy", easyWordIndex.Count);
+                PlayerPrefs.SetInt("wordcounteasy", _easyWordIndex.Count);
 
-                counter++;
-                passButtonText.text = "Pass (" + (passRight - counter) + ")";
+                _counter++;
+                passButtonText.text = "Pass (" + (_passRight - _counter) + ")";
 
-                if (counter == passRight)
+                if (_counter == _passRight)
                 {
+                    pass.GetComponent<Button>().enabled = false;
+                    pass.GetComponent<EventTrigger>().enabled = false;
+
                     Color buttonColor = pass.color;
                     Color textColor = passButtonText.color;
 
@@ -699,52 +701,55 @@ public class TabooWords : MonoBehaviour
                 }
             }
         }
-        if (difficulty == "Medium")
+        if (_difficulty == "Medium")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            if (counter != passRight)
+            if (_counter != _passRight)
             {
-                randomWord = Random.Range(0, mediumWords.Length);
+                _randomWord = Random.Range(0, _mediumWords.Length);
 
-                while (mediumWordIndex.Count == 0 && lastSavedIndex == randomWord)
+                while (_mediumWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
                 {
-                    randomWord = Random.Range(0, mediumWords.Length);
+                    _randomWord = Random.Range(0, _mediumWords.Length);
                 }
 
-                while (mediumWordIndex.Contains(randomWord))
+                while (_mediumWordIndex.Contains(_randomWord))
                 {
-                    randomWord = Random.Range(0, mediumWords.Length);
+                    _randomWord = Random.Range(0, _mediumWords.Length);
                 }
-                if (!mediumWordIndex.Contains(randomWord))
+                if (!_mediumWordIndex.Contains(_randomWord))
                 {
-                    mediumWordIndex.Add(randomWord);
+                    _mediumWordIndex.Add(_randomWord);
 
-                    Word.text = mediumWords[randomWord][0];
-                    taboo1.text = mediumWords[randomWord][1];
-                    taboo2.text = mediumWords[randomWord][2];
-                    taboo3.text = mediumWords[randomWord][3];
-                    taboo4.text = mediumWords[randomWord][4];
-                    taboo5.text = mediumWords[randomWord][5];
+                    mainWord.text = _mediumWords[_randomWord][0];
+                    tabooWord1.text = _mediumWords[_randomWord][1];
+                    tabooWord2.text = _mediumWords[_randomWord][2];
+                    tabooWord3.text = _mediumWords[_randomWord][3];
+                    tabooWord4.text = _mediumWords[_randomWord][4];
+                    tabooWord5.text = _mediumWords[_randomWord][5];
 
-                    if (mediumWordIndex.Count == mediumWords.Length)
+                    if (_mediumWordIndex.Count == _mediumWords.Length)
                     {
-                        PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                        mediumWordIndex.Clear();
+                        PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                        _mediumWordIndex.Clear();
                     }
                 }
 
-                for (int i = 0; i < mediumWordIndex.Count; i++)
+                for (int i = 0; i < _mediumWordIndex.Count; i++)
                 {
-                    PlayerPrefs.SetInt("wordindexmedium" + i, mediumWordIndex[i]);
+                    PlayerPrefs.SetInt("wordindexmedium" + i, _mediumWordIndex[i]);
                 }
-                PlayerPrefs.SetInt("wordcountmedium", mediumWordIndex.Count);
+                PlayerPrefs.SetInt("wordcountmedium", _mediumWordIndex.Count);
 
-                counter++;
-                passButtonText.text = "Pass (" + (passRight - counter) + ")";
+                _counter++;
+                passButtonText.text = "Pass (" + (_passRight - _counter) + ")";
 
-                if (counter == passRight)
+                if (_counter == _passRight)
                 {
+                    pass.GetComponent<Button>().enabled = false;
+                    pass.GetComponent<EventTrigger>().enabled = false;
+
                     Color buttonColor = pass.color;
                     Color textColor = passButtonText.color;
 
@@ -760,52 +765,55 @@ public class TabooWords : MonoBehaviour
                 }
             }
         }
-        if (difficulty == "Hard")
+        if (_difficulty == "Hard")
         {
-            lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
+            _lastSavedIndex = PlayerPrefs.GetInt("lastsavedindex");
 
-            if (counter != passRight)
+            if (_counter != _passRight)
             {
-                randomWord = Random.Range(0, hardWords.Length);
+                _randomWord = Random.Range(0, _hardWords.Length);
 
-                while (hardWordIndex.Count == 0 && lastSavedIndex == randomWord)
+                while (_hardWordIndex.Count == 0 && _lastSavedIndex == _randomWord)
                 {
-                    randomWord = Random.Range(0, hardWords.Length);
+                    _randomWord = Random.Range(0, _hardWords.Length);
                 }
 
-                while (hardWordIndex.Contains(randomWord))
+                while (_hardWordIndex.Contains(_randomWord))
                 {
-                    randomWord = Random.Range(0, hardWords.Length);
+                    _randomWord = Random.Range(0, _hardWords.Length);
                 }
-                if (!hardWordIndex.Contains(randomWord))
+                if (!_hardWordIndex.Contains(_randomWord))
                 {
-                    hardWordIndex.Add(randomWord);
+                    _hardWordIndex.Add(_randomWord);
 
-                    Word.text = hardWords[randomWord][0];
-                    taboo1.text = hardWords[randomWord][1];
-                    taboo2.text = hardWords[randomWord][2];
-                    taboo3.text = hardWords[randomWord][3];
-                    taboo4.text = hardWords[randomWord][4];
-                    taboo5.text = hardWords[randomWord][5];
+                    mainWord.text = _hardWords[_randomWord][0];
+                    tabooWord1.text = _hardWords[_randomWord][1];
+                    tabooWord2.text = _hardWords[_randomWord][2];
+                    tabooWord3.text = _hardWords[_randomWord][3];
+                    tabooWord4.text = _hardWords[_randomWord][4];
+                    tabooWord5.text = _hardWords[_randomWord][5];
 
-                    if (hardWordIndex.Count == hardWords.Length)
+                    if (_hardWordIndex.Count == _hardWords.Length)
                     {
-                        PlayerPrefs.SetInt("lastsavedindex", randomWord);
-                        hardWordIndex.Clear();
+                        PlayerPrefs.SetInt("lastsavedindex", _randomWord);
+                        _hardWordIndex.Clear();
                     }
                 }
 
-                for (int i = 0; i < hardWordIndex.Count; i++)
+                for (int i = 0; i < _hardWordIndex.Count; i++)
                 {
-                    PlayerPrefs.SetInt("wordindexhard" + i, hardWordIndex[i]);
+                    PlayerPrefs.SetInt("wordindexhard" + i, _hardWordIndex[i]);
                 }
-                PlayerPrefs.SetInt("wordcounthard", hardWordIndex.Count);
+                PlayerPrefs.SetInt("wordcounthard", _hardWordIndex.Count);
 
-                counter++;
-                passButtonText.text = "Pass (" + (passRight - counter) + ")";
+                _counter++;
+                passButtonText.text = "Pass (" + (_passRight - _counter) + ")";
 
-                if (counter == passRight)
+                if (_counter == _passRight)
                 {
+                    pass.GetComponent<Button>().enabled = false;
+                    pass.GetComponent<EventTrigger>().enabled = false;
+
                     Color buttonColor = pass.color;
                     Color textColor = passButtonText.color;
 

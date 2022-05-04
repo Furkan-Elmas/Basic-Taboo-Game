@@ -1,26 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TimeScale : MonoBehaviour
 {
-    int time = 60;
-    public Text timeShow;
+    [SerializeField] private Text timeShow;
+
+    private TeamChange TeamChange;
+
+    private int _time;
 
     void Start()
     {
-        time = PlayerPrefs.GetInt("time");
-        timeShow.text = time +"";
+        TeamChange = GetComponent<TeamChange>();
+
+        _time = PlayerPrefs.GetInt("time");
+        timeShow.text = _time + "";
         InvokeRepeating("timer", 1, 1);
     }
 
     public void timer()
     {
-        time--;
-        timeShow.text = time.ToString();
-        if(time == 0)
+        _time--;
+        timeShow.text = _time.ToString();
+        if(_time == 0)
         {
+            TeamChange.ChangePlayerTeam();
+            SceneManager.LoadScene(3);
             CancelInvoke("timer");
         }
     }

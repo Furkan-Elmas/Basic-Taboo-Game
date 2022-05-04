@@ -1,22 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
 public class SceneLoad : MonoBehaviour
 {
-    public InputField teamOne,teamTwo;
+    [SerializeField] private InputField teamOne,teamTwo;
+
 
     public void goToTeamNames()
     {
         SceneManager.LoadScene(1);
     }
+
     public void goToBack()
     {
         SceneManager.LoadScene(0);
     }
+
     public void goToGame()
     {
         if (teamOne.text == "" || teamTwo.text == "")
@@ -26,18 +27,22 @@ public class SceneLoad : MonoBehaviour
             SceneManager.LoadScene(2);
         }
     }
+
     public void ContinueButton()
     {
         SceneManager.LoadScene(2);
     }
+
     public void goToHelp()
     {
         SceneManager.LoadScene(4);
     }
+
     public void goToSetting()
     {
         SceneManager.LoadScene(5);
     }
+
     public void dataRead()
     {
         PlayerPrefs.SetString("teamOne", teamOne.text);
@@ -51,6 +56,7 @@ public class SceneLoad : MonoBehaviour
         PlayerPrefs.DeleteKey("wordcount");
         int count = PlayerPrefs.GetInt("count");
     }
+
     public void gameRestart()
     {
         string teamone = PlayerPrefs.GetString("teamOne");
@@ -62,6 +68,7 @@ public class SceneLoad : MonoBehaviour
         PlayerPrefs.DeleteKey("wordindex");
         PlayerPrefs.DeleteKey("wordcount");
     }
+
     public void dataRenovation()
     {
         if (PlayerPrefs.GetInt("time") == 0)
@@ -81,6 +88,7 @@ public class SceneLoad : MonoBehaviour
             PlayerPrefs.SetString("difficulty", "Easy");
         }
     }
+
     public void dataClear()
     {
         int countE = PlayerPrefs.GetInt("wordcounteasy");
@@ -88,15 +96,15 @@ public class SceneLoad : MonoBehaviour
         int countH = PlayerPrefs.GetInt("wordcounthard");
         for (int i = 0; i < countE; i++)
         {
-            PlayerPrefs.DeleteKey("wordindexeasy" + i);
+            PlayerPrefs.DeleteKey("wordindexeasy" + i.ToString());
         }
         for (int i = 0; i < countM; i++)
         {
-            PlayerPrefs.DeleteKey("wordindexmedium" + i);
+            PlayerPrefs.DeleteKey("wordindexmedium" + i.ToString());
         }
         for (int i = 0; i < countH; i++)
         {
-            PlayerPrefs.DeleteKey("wordindexhard" + i);
+            PlayerPrefs.DeleteKey("wordindexhard" + i.ToString());
         }
         PlayerPrefs.DeleteKey("wordcounteasy");
         PlayerPrefs.DeleteKey("wordcountmedium");

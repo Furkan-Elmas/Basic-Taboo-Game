@@ -1,24 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class timeCakeScale : MonoBehaviour
+public class TimeCakeScale : MonoBehaviour
 {
-    float totalScore = 60.0f;
-    float nowScore = 60.0f;
-    public Slider showCake;
+    [SerializeField] private Slider showCake;
+
+    private float _totalScore = 60.0f;
+    private float _currentScore = 60.0f;
+
     void Start()
     {
-        totalScore = PlayerPrefs.GetInt("time");
-        nowScore = PlayerPrefs.GetInt("time");
-        InvokeRepeating("cakeFill", 1, 1);
+        _totalScore = PlayerPrefs.GetInt("time");
+        _currentScore = PlayerPrefs.GetInt("time");
+        InvokeRepeating("CakeFill", 1, 1);
     }
 
     // Update is called once per frame
-    void cakeFill()
+    void CakeFill()
     {
-        nowScore = nowScore - 1f;
-        showCake.value = nowScore / totalScore;
+        _currentScore = _currentScore - 1f;
+        showCake.value = _currentScore / _totalScore;
     }
 }

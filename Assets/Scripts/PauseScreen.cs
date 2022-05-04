@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseScreen : MonoBehaviour
 {
-    public GameObject panel, resumeButton, mainMenuButton;
+    [SerializeField] private GameObject panel, resumeButton, mainMenuButton;
 
     void Start()
     {

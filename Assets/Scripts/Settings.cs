@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Settings : MonoBehaviour
 {
-    public Image Button_60,Button_90,Button_120,Button_2,Button_3,Button_4,Button_20,Button_30,Button_40,Button_Easy,Button_Medium,Button_Hard;
+    [SerializeField] private Image Button_60,Button_90,Button_120,Button_2,Button_3,Button_4,Button_20,Button_30,Button_40,Button_Easy,Button_Medium,Button_Hard;
 
     public void Update()
     {
